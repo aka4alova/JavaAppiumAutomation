@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 
 public class Lesson3 {
     private AppiumDriver<?> driver;
@@ -96,6 +97,31 @@ public class Lesson3 {
                 20
         );
 
+    }
+
+    @Test // Ex4*: Тест: проверка слов в поиске
+    public void checkContainsText() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                5
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "Cannot find search input",
+                5,
+                "Java"
+        );
+        WebElement element = waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                5
+        );
+        List<WebElement> elements = element.findElements(By.xpath("//*[contains(@resource-id, 'org.wikipedia:id/page_list_item_title')]"));
+        for (WebElement webElement : elements) {
+            String text = webElement.getText();
+            System.out.println("result is '" + text + "'");
+            Assert.assertNotNull("result text is null", text);
+            Assert.assertTrue("wrong results", text.toLowerCase().contains("java"));
+        }
     }
 
     private WebElement waitForElementPresent(By by, long timeoutInSeconds) {
