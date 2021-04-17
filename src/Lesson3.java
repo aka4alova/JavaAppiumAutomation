@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class Lesson3 {
     private AppiumDriver<?> driver;
@@ -25,7 +26,7 @@ public class Lesson3 {
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app", "/Users/anastasia.kachalova/Desktop/JavaAppiumAutomation/apks/org.wikipedia.apk");
+        capabilities.setCapability("app", "/Users/anastasia.kachalova/Desktop/JavaAppiumAutomation/apks/org.wiki.apk");
         capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 
@@ -38,7 +39,7 @@ public class Lesson3 {
         driver.quit();
     }
 
-    @Test
+    @Test // Ex2: Создание метода
     public void isElementHasText() {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -54,11 +55,47 @@ public class Lesson3 {
 
     public void assertElementHasText(By by, String expected, String assertErrorMessage) {
         WebElement element = waitForElementPresent(by, 5);
+
         Assert.assertEquals(
                 assertErrorMessage,
                 expected,
                 element.getAttribute("text")
         );
+    }
+
+    @Test //Ex3: Тест: отмена поиска
+    public void checkMultipleSearchResultAndCancel() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                5
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "Cannot find search input",
+                5,
+                "Java"
+        );
+        WebElement element = waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                5
+        );
+        List<WebElement> elements = element.findElements(By.xpath("//*[contains(@resource-id, 'org.wikipedia:id/page_list_item_title')]"));
+        for (WebElement webElement : elements) {
+            System.out.println(webElement.getText());
+        }
+
+        Assert.assertTrue("wrong results number", elements.size() > 1);
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                5
+        );
+        waitForElementNotPresent(
+                By.xpath("//*[contains(@resource-id, 'org.wikipedia:id/page_list_item_title')]"),
+                "search results is still here",
+                20
+        );
+
     }
 
     private WebElement waitForElementPresent(By by, long timeoutInSeconds) {
@@ -72,4 +109,19 @@ public class Lesson3 {
         element.click();
         return element;
     }
+
+    private WebElement waitForElementAndSendKeys(By by, String errorMessage, long timeoutInSeconds, String searchText) {
+        WebElement element = waitForElementPresent(by, timeoutInSeconds);
+        element.sendKeys(searchText);
+        return element;
+    }
+
+    private boolean waitForElementNotPresent(By by, String errorMessage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+    }
+
 }
