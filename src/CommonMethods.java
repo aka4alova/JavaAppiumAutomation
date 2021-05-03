@@ -5,7 +5,6 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -30,13 +29,13 @@ public class CommonMethods {
         capabilities.setCapability("app", "/Users/anastasiia.kachalova/Automation/Projects/JavaAppiumAutomation/apks/org.wiki.apk");
         capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, false);
+        capabilities.setCapability("orientation", "PORTRAIT");
         driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         Utils.sleep(4);
     }
 
     @After
     public void tearDown() {
-        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
