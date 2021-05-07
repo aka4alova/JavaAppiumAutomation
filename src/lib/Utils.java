@@ -1,3 +1,5 @@
+package lib;
+
 public class Utils {
 
     public static void sleep(int sleepTimeInSeconds) {
