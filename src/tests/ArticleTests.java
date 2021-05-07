@@ -3,8 +3,10 @@ package tests;
 import lib.CoreTestCase;
 
 import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 public class ArticleTests extends CoreTestCase {
 
@@ -31,6 +33,23 @@ public class ArticleTests extends CoreTestCase {
         ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         articlePageObject.waitForTitleElement();
         articlePageObject.swipeToFooter();
+    }
+
+    @Test
+    public void testIsElementPresent() {    // Ex6: Тест: assert title
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        System.out.println("Открыли статью");
+
+        //Utils.sleep(3);
+        MainPageObject mainPageObject = new MainPageObject(driver);
+
+        mainPageObject.assertElementIsPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "cannot found article title"
+        );
     }
 
 }

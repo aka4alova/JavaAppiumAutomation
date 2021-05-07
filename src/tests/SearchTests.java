@@ -50,4 +50,16 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.assertThereIsNoResultsOfSearch();
     }
 
+    @Test //Ex3: Тест: отмена поиска
+    public void testCheckMultipleSearchResultAndCancel() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        int amountOfSearchResults = searchPageObject.getAmountOfFoundArticles();
+        assertTrue("too few results was found", amountOfSearchResults > 1);
+        searchPageObject.clickCancelSearch();
+        searchPageObject.assertThereIsNoResultsOfSearch();
+    }
+
 }

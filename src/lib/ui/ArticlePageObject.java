@@ -90,4 +90,27 @@ public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    public void addNextArticleToMyList(String nameOfFolder) {
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find 'More' button",
+                10
+        );
+
+        Utils.sleep(4);
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                "Cannot find 'Add to reading list' button",
+                10
+        );
+        String folderNameXpath = getFolderXpathByName(nameOfFolder);
+        this.waitForElementAndClick(
+                By.xpath(folderNameXpath), // выбираю ранее созданный список
+                "Cannot find bookmark folder",
+                10
+        );
+    }
+
 }
