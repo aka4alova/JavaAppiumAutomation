@@ -62,4 +62,20 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.assertThereIsNoResultsOfSearch();
     }
 
+    @Test //Ex9*: Рефакторинг темплейта
+    public void testFindThreeArticlesByTitleAndDescription() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        String [] titles = { "Java", "JavaScript", "Java (programming language)" };
+        String [] descriptions = { "Island of Indonesia", "Programming language", "Object-oriented programming language" };
+        int amountOfSearchResults = searchPageObject.getAmountOfFoundArticles();
+        System.out.println("Найдено статей: " + amountOfSearchResults);
+        assertTrue("too few results was found", amountOfSearchResults > 2);
+        for (int i = 0; i < titles.length; i++) {
+            searchPageObject.waitForElementByTitleAndDescription(titles[i], descriptions[i]);
+        }
+        //searchPageObject.waitForElementByTitleAndDescription(titles[1], descriptions[2]); //тут тест должен упасть
+    }
+
 }

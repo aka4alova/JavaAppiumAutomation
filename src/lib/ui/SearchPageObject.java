@@ -10,6 +10,12 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
+            SEARCH_RESULT_BY_TYTLE_AND_DESCR_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_title']" +
+                    "[@text='{TITLE_SUBSTRING}']/..//*[@resource-id='org.wikipedia:id/page_list_item_description']" +
+                    "[@text='{DESCRIPTION_SUBSTRING}']/..",
+            SEARCH_RESULT_BY_TYTLE_AND_DESCR_TPL_ALTERNATIVE = "//*[@resource-id='org.wikipedia:id/page_list_item_container' " +
+                    "and *//*[@text = '{TITLE_SUBSTRING}' and @resource-id = 'org.wikipedia:id/page_list_item_title'] " +
+                    "and *//*[@text = '{DESCRIPTION_SUBSTRING}' and @resource-id = 'org.wikipedia:id/page_list_item_description']]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
             SEARCH_EMPTY_RESULT_LABEL = "//*[@text='No results found']";
 
@@ -20,6 +26,11 @@ public class SearchPageObject extends MainPageObject {
     /*TEMPLATES METHODS */
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchElementByTitleAndDescription(String title, String description) {
+        //return SEARCH_RESULT_BY_TYTLE_AND_DESCR_TPL_ALTERNATIVE.replace("{TITLE_SUBSTRING}", title).replace("{DESCRIPTION_SUBSTRING}",description);
+        return SEARCH_RESULT_BY_TYTLE_AND_DESCR_TPL.replace("{TITLE_SUBSTRING}", title).replace("{DESCRIPTION_SUBSTRING}", description);
     }
     /*TEMPLATES METHODS */
 
@@ -72,6 +83,11 @@ public class SearchPageObject extends MainPageObject {
 
     public void assertThereIsNoResultsOfSearch() {
         this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "we supposed not to find any results");
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String searchResultXpath = getResultSearchElementByTitleAndDescription(title, description);
+        this.waitForElementPresent(By.xpath(searchResultXpath), "cannot find search result by title " + title + " and description " + description, 15);
     }
 
 }
