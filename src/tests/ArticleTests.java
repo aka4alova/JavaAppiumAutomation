@@ -47,7 +47,7 @@ public class ArticleTests extends CoreTestCase {
         MainPageObject mainPageObject = new MainPageObject(driver);
 
         mainPageObject.assertElementIsPresent(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "id:org.wikipedia:id/view_page_title_text",
                 "cannot found article title"
         );
     }

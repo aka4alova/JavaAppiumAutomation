@@ -12,20 +12,20 @@ public class Lesson3Ex4 extends CoreTestCase {
     public void testCheckContainsText() {
         MainPageObject mainPageObject = new MainPageObject(driver);
         mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
+                "id:org.wikipedia:id/search_container",
                 "Cannot find 'Search Wikipedia' input",
                 5
         );
 
         mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "xpath://*[contains(@resource-id,'org.wikipedia:id/search_src_text')]",
                 "Cannot find search input",
                 5,
                 "Java"
         );
 
         WebElement element = mainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/search_results_list"),
+                "id:org.wikipedia:id/search_results_list",
                 "Cannot find result list",
                 5
         );

@@ -9,15 +9,15 @@ import org.openqa.selenium.WebElement;
 public class ArticlePageObject extends MainPageObject {
 
     private static final String
-            TITLE = "org.wikipedia:id/view_page_title_text",
-            FOOTER_ELEMENT = "//*[@text='View page in browser']",
-            OPTIONS_BUTTON = "//android.widget.ImageView[@content-desc='More options']",
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "//*[@text='Add to reading list']",
-            ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
-            MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
-            MY_LIST_OK_BUTTON = "//*[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
-            FOLDER_BY_NAME_TPL = "//*[@text = '{FOLDER_NAME}']";
+            TITLE = "id:org.wikipedia:id/view_page_title_text",
+            FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
+            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
+            OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
+            ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
+            MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
+            MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
+            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
+            FOLDER_BY_NAME_TPL = "xpath://*[@text = '{FOLDER_NAME}']";
 
     private static String getFolderXpathByName(String nameOfFolder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", nameOfFolder);
@@ -28,7 +28,7 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public WebElement waitForTitleElement() {
-        return this.waitForElementPresent(By.id(TITLE), "Cannot find article title on page!", 15);
+        return this.waitForElementPresent(TITLE, "Cannot find article title on page!", 15);
     }
 
     public String getArticleTitle() {
@@ -38,7 +38,7 @@ public class ArticlePageObject extends MainPageObject {
 
     public void swipeToFooter() {
         this.swipeUpToFindElement(
-                By.xpath(FOOTER_ELEMENT),
+                FOOTER_ELEMENT,
                 "Cannot find the article title",
                 20
         );
@@ -47,7 +47,7 @@ public class ArticlePageObject extends MainPageObject {
     public void addFirstArticleToMyList(String nameOfFolder) {
 
         this.waitForElementAndClick(
-                By.xpath(OPTIONS_BUTTON),
+                OPTIONS_BUTTON,
                 "Cannot find 'More' button",
                 10
         );
@@ -55,28 +55,28 @@ public class ArticlePageObject extends MainPageObject {
         Utils.sleep(4);
 
         this.waitForElementAndClick(
-                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 "Cannot find 'Add to reading list' button",
                 10
         );
         this.waitForElementAndClick(
-                By.id(ADD_TO_MY_LIST_OVERLAY),
+                ADD_TO_MY_LIST_OVERLAY,
                 "Cannot find 'GOT IT' button",
                 10
         );
         this.waitForElementAndClear(
-                By.id(MY_LIST_NAME_INPUT),
+                MY_LIST_NAME_INPUT,
                 "Cannot find input to set name of articles folder",
                 5
         );
         this.waitForElementAndSendKeys(
-                By.id(MY_LIST_NAME_INPUT),
+                MY_LIST_NAME_INPUT,
                 "Cannot find input to set name of articles folder",
                 5,
                 nameOfFolder
         );
         this.waitForElementAndClick(
-                By.xpath(MY_LIST_OK_BUTTON),
+                MY_LIST_OK_BUTTON,
                 "Cannot find 'OK' button",
                 5
         );
@@ -84,7 +84,7 @@ public class ArticlePageObject extends MainPageObject {
 
     public void closeArticle() {
         this.waitForElementAndClick(
-                By.xpath(CLOSE_ARTICLE_BUTTON),
+                CLOSE_ARTICLE_BUTTON,
                 "Cannot find 'X' button",
                 10
         );
@@ -93,7 +93,7 @@ public class ArticlePageObject extends MainPageObject {
     public void addNextArticleToMyList(String nameOfFolder) {
 
         this.waitForElementAndClick(
-                By.xpath(OPTIONS_BUTTON),
+                OPTIONS_BUTTON,
                 "Cannot find 'More' button",
                 10
         );
@@ -101,13 +101,13 @@ public class ArticlePageObject extends MainPageObject {
         Utils.sleep(4);
 
         this.waitForElementAndClick(
-                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 "Cannot find 'Add to reading list' button",
                 10
         );
         String folderNameXpath = getFolderXpathByName(nameOfFolder);
         this.waitForElementAndClick(
-                By.xpath(folderNameXpath), // выбираю ранее созданный список
+                folderNameXpath, // выбираю ранее созданный список
                 "Cannot find bookmark folder",
                 10
         );

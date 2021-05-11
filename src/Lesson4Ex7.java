@@ -17,7 +17,7 @@ public class Lesson4Ex7 extends CoreTestCase {
     @Test
     public void testRotationAndFail() {                //Ex7*: Поворот экрана, тест который падает после поворота.
         mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
+                "id:org.wikipedia:id/search_container",
                 "Cannot find 'Search Wikipedia' input",
                 5
         );
@@ -25,26 +25,26 @@ public class Lesson4Ex7 extends CoreTestCase {
         String searchLine = "Java";
 
         mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "xpath://*[contains(@resource-id,'org.wikipedia:id/search_src_text')]",
                 "Cannot find search input",
                 5,
                 searchLine
         );
 
         mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']",
                 "Cannot find 'Object-oriented programming language'",
                 15
         );
         String titleBeforeRotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "id:org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find title of article",
                 10
         );
         driver.rotate(ScreenOrientation.LANDSCAPE);
         String titleAfterRotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "id:org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find title of article",
                 10
@@ -60,7 +60,7 @@ public class Lesson4Ex7 extends CoreTestCase {
     @Test
     public void testRotation() {                //Ex7*: Поворот экрана, тест запускается следующим после упавшего.
         mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
+                "id:org.wikipedia:id/search_container",
                 "Cannot find 'Search Wikipedia' input",
                 5
         );
@@ -68,20 +68,20 @@ public class Lesson4Ex7 extends CoreTestCase {
         String searchLine = "Java";
 
         mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "xpath://*[contains(@resource-id,'org.wikipedia:id/search_src_text')]",
                 "Cannot find search input",
                 5,
                 searchLine
         );
 
         mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']",
                 "Cannot find 'Object-oriented programming language'",
                 15
         );
 
         String titleBeforeRotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "id:org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find title of article",
                 10
@@ -89,7 +89,7 @@ public class Lesson4Ex7 extends CoreTestCase {
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         String titleAfterRotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "id:org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find title of article",
                 10
