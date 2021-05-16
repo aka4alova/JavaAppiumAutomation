@@ -1,13 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject {
+abstract public class MyListsPageObject extends MainPageObject {
 
-    public static final String
-            FOLDER_BY_NAME_TPL = "xpath://*[@text = '{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']";
+    protected static String
+            FOLDER_BY_NAME_TPL,
+            ARTICLE_BY_TITLE_TPL;
 
     private static String getFolderXpathByName(String nameOfFolder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", nameOfFolder);
@@ -32,7 +32,9 @@ public class MyListsPageObject extends MainPageObject {
     }
 
     public void waitForArticleToAppearByTitle(String articleTitle) {
+        System.out.println("articleTitle передали в метод waitForArticleToAppearByTitle = " + articleTitle);
         String articleXpath = getSavedArticleXpathByTitle(articleTitle);
+        System.out.println("articleXpath по которому ищем статью = " + articleXpath);
         this.waitForElementPresent(articleXpath, "Cannot find saved article by title " + articleTitle, 15);
     }
 
@@ -48,6 +50,11 @@ public class MyListsPageObject extends MainPageObject {
                 articleXpath,
                 "Cannot find saved article"
         );
+        System.out.println("Свайпнули статью влево");
+        if (Platform.getInstance().isIOS()) {
+            this.clickElementToDelete(articleXpath, "Cannot find saved article");
+
+        }
         this.waitForArticleToDisappearByTitle(articleTitle);
     }
 

@@ -6,11 +6,12 @@
     </selectedOptions>
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+    <option name="PACKAGE_NAME" value="" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
-    <option name="TEST_OBJECT" value="class" />
+    <option name="TEST_OBJECT" value="package" />
     <envs>
-      <env name="PLATFORM" value="android" />
+      <env name="PLATFORM" value="ios" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

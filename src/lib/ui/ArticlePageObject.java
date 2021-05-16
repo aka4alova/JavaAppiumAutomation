@@ -2,22 +2,23 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
+import lib.Platform;
 import lib.Utils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import lib.Platform;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
-    private static final String
-            TITLE = "id:org.wikipedia:id/view_page_title_text",
-            FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
-            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
-            ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-            MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-            MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-            FOLDER_BY_NAME_TPL = "xpath://*[@text = '{FOLDER_NAME}']";
+    protected static String
+            TITLE,
+            FOOTER_ELEMENT,
+            OPTIONS_BUTTON,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            ADD_TO_MY_LIST_OVERLAY,
+            MY_LIST_NAME_INPUT,
+            MY_LIST_OK_BUTTON,
+            CLOSE_ARTICLE_BUTTON,
+            FOLDER_BY_NAME_TPL;
 
     private static String getFolderXpathByName(String nameOfFolder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", nameOfFolder);
@@ -28,20 +29,29 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public WebElement waitForTitleElement() {
+        //System.out.println(TITLE);
+        System.out.println("Статья = " + waitForElementPresent(TITLE, "Cannot find article title on page!", 15).getAttribute("name"));
         return this.waitForElementPresent(TITLE, "Cannot find article title on page!", 15);
     }
 
     public String getArticleTitle() {
         WebElement titleElement = waitForTitleElement();
-        return titleElement.getAttribute("text");
+        System.out.println("Название статьи = " + titleElement.getAttribute("name"));
+        if (Platform.getInstance().isAndroid()) {
+            return titleElement.getAttribute("text");
+        } else {
+            return titleElement.getAttribute("name");
+        }
+
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(
-                FOOTER_ELEMENT,
-                "Cannot find the article title",
-                20
-        );
+
+        if (Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find the end of article", 40);
+        } else {
+            this.swipeUpTillElementAppear(FOOTER_ELEMENT, "cannot find the end of article", 40);
+        }
     }
 
     public void addFirstArticleToMyList(String nameOfFolder) {
@@ -80,6 +90,10 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot find 'OK' button",
                 5
         );
+    }
+
+    public void addArticlesToMySaved(){
+        this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find option to add article to reading list", 5);
     }
 
     public void closeArticle() {

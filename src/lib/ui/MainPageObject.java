@@ -4,6 +4,8 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
@@ -72,7 +74,7 @@ public class MainPageObject {
         int amountOfElements = getAmountOfElements(locator);
         System.out.println("amountOfElements = " + amountOfElements);
         if (amountOfElements <= 0) {
-            String defaultMessage = "An element '" + locator.toString() + "' supposed to be present ";
+            String defaultMessage = "An element '" + locator + "' supposed to be present ";
             throw new AssertionError(defaultMessage + "; " + errorMessage);
         }
     }
@@ -109,6 +111,27 @@ public class MainPageObject {
         }
     }
 
+    public void swipeUpTillElementAppear(String locator, String errorMessage, int maxSwipes) {
+        int alreadySwiped = 0;
+        while (!this.isElementLocatedOnTheScreen(locator)) {
+            if (alreadySwiped > maxSwipes) {
+                Assert.assertTrue(errorMessage, this.isElementLocatedOnTheScreen(locator));
+            }
+            swipeUpQuick();
+            ++alreadySwiped;
+        }
+    }
+
+    public boolean isElementLocatedOnTheScreen (String locator) {
+        int elementLocationByY = this.waitForElementPresent(locator, "Cannot find element by locator", 1).getLocation().getY();
+        int screenSizeByY = driver.manage().window().getSize().getHeight();
+        return elementLocationByY < screenSizeByY;
+    }
+
+    public void clickElementToDelete(String locator, String errorMessage){
+        WebElement element = this.waitForElementAndClick("id:swipe action delete", "cannot find and click delete button", 10);
+    }
+
     public void swipeElementToLeft(String locator, String errorMessage) {
         WebElement element = waitForElementPresent(locator, errorMessage, 10);
         int left_x = element.getLocation().getX();
@@ -117,18 +140,22 @@ public class MainPageObject {
         int lower_y = upper_y + element.getSize().getHeight();
         int middle_y = (upper_y + lower_y) / 2;
         TouchAction action = new TouchAction(driver);
-        action
-                .press(PointOption.point(right_x, middle_y))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
-                .moveTo(PointOption.point(left_x, middle_y))
-                .release()
-                .perform();
+        action.press(PointOption.point(right_x, middle_y));
+        action.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)));
+        if (Platform.getInstance().isAndroid()){
+            action.moveTo(PointOption.point(left_x, middle_y));
+        } else {
+            int offsetX = (-1 * element.getSize().getWidth());
+            action.moveTo(PointOption.point(offsetX, 0));
+        }
+        action.release();
+        action.perform();
     }
 
     public void assertElementNotPresent(String locator, String errorMessage) {
         int amountOfElements = getAmountOfElements(locator);
         if (amountOfElements > 0) {
-            String defaultMessage = "An element '" + locator.toString() + "' supposed to be not present ";
+            String defaultMessage = "An element '" + locator + "' supposed to be not present ";
             throw new AssertionError(defaultMessage + " " + errorMessage);
         }
     }
