@@ -15,7 +15,6 @@ public class CoreTestCase extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
         driver = Platform.getInstance().getDriverByPlatformEnv();
-        System.out.println("driver = " + driver);
         this.skipWelcomePageForIOSApp();
     }
 

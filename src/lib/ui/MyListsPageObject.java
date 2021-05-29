@@ -32,9 +32,7 @@ abstract public class MyListsPageObject extends MainPageObject {
     }
 
     public void waitForArticleToAppearByTitle(String articleTitle) {
-        System.out.println("articleTitle передали в метод waitForArticleToAppearByTitle = " + articleTitle);
         String articleXpath = getSavedArticleXpathByTitle(articleTitle);
-        System.out.println("articleXpath по которому ищем статью = " + articleXpath);
         this.waitForElementPresent(articleXpath, "Cannot find saved article by title " + articleTitle, 15);
     }
 
@@ -50,7 +48,6 @@ abstract public class MyListsPageObject extends MainPageObject {
                 articleXpath,
                 "Cannot find saved article"
         );
-        System.out.println("Свайпнули статью влево");
         if (Platform.getInstance().isIOS()) {
             this.clickElementToDelete(articleXpath, "Cannot find saved article");
 
@@ -60,11 +57,23 @@ abstract public class MyListsPageObject extends MainPageObject {
 
     public void openArticleByName(String articleTitle) {
         String articleXpath = getSavedArticleXpathByTitle(articleTitle);
+        System.out.println("article xpath = " + articleXpath);
         this.waitForElementAndClick(
                 articleXpath,
                 "Cannot find article by name " + articleXpath,
                 5
         );
+    }
+
+
+    public void waitForArticleTitleAndDescription(String articleTitle, String articleDescription) {
+        String articleXpath = getSavedArticleXpathByTitle(articleTitle);
+        System.out.println("article xpath = " + articleXpath);
+        String descriptionXpath = getSavedArticleXpathByTitle(articleDescription);
+        System.out.println("description xpath = " + descriptionXpath);
+        this.waitForElementPresent(articleXpath, "Cannot find articleaaaaa title on page!", 15);
+        this.waitForElementPresent(descriptionXpath, "Cannot find article description on page!", 15);
+
     }
 
 }

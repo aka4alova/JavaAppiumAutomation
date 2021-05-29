@@ -27,13 +27,11 @@ abstract public class NavigationUI extends MainPageObject {
                 "Cannot find  close popup button",
                 10
         );
-        System.out.println("Нашли крестик");
         this.waitForElementAndClick(
                 POPUP_BUTTON,
                 "Cannot find  close popup button",
                 10
         );
-        System.out.println("Закрыли попап");
     }
 
 

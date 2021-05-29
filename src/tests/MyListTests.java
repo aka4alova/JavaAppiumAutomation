@@ -3,15 +3,13 @@ package tests;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.Utils;
-import lib.ui.ArticlePageObject;
-import lib.ui.MyListsPageObject;
-import lib.ui.NavigationUI;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 
 public class MyListTests extends CoreTestCase {
 
@@ -32,9 +30,7 @@ public class MyListTests extends CoreTestCase {
         if (Platform.getInstance().isAndroid()) {
 
             articlePageObject.addFirstArticleToMyList(nameOfFolder);
-            System.out.println("Андроид: добавили статью в папку");
             articlePageObject.closeArticle();
-            System.out.println("Андроид: Закрыли статью");
 
         } else {
            articlePageObject.addArticlesToMySaved();
@@ -47,7 +43,6 @@ public class MyListTests extends CoreTestCase {
 
         if (Platform.getInstance().isAndroid()) {
             myListsPageObject.openFolderByName(nameOfFolder);
-            System.out.println("Андроид: открыли нужную папку");
         } else {
             navigationUI.clickClosePopup();
         }
@@ -61,42 +56,58 @@ public class MyListTests extends CoreTestCase {
     public void testSaveTwoArticlesToMyList() { //Ex.5: Тест: сохранение двух статей
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        searchPageObject.initSearchInput();
-        System.out.println("Тапнули в поиск");
-        searchPageObject.typeSearchLine("Java");
-        System.out.println("Ввели поисковую строку");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
-        System.out.println("Открыли нужную статью");
-        articlePageObject.waitForTitleElement();
-        System.out.println("Дождались заголовка");
-        String firstArticleTitle = articlePageObject.getArticleTitle();
-        String nameOfFolder = "MyFirstList";
-        articlePageObject.addFirstArticleToMyList(nameOfFolder);
-        articlePageObject.closeArticle();
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
-        searchPageObject.clickByArticleWithSubstring("Appium");
-        articlePageObject.waitForTitleElement();
-        String secondArticleTitle = articlePageObject.getArticleTitle();
-        articlePageObject.addNextArticleToMyList(nameOfFolder);
-        articlePageObject.closeArticle();
         NavigationUI navigationUI = NavigationUIFactory.get(driver);
+        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        articlePageObject.waitForTitleElement();
+        String articleTitle = articlePageObject.getArticleTitle();
+
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addFirstArticleToMyList(nameOfFolder);
+            articlePageObject.closeArticle();
+        } else {
+            articlePageObject.addArticlesToMySaved();
+            articlePageObject.closeArticle();
+            searchPageObject.clickCancelSearch();
+        }
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("ios");
+        searchPageObject.clickByArticleWithSubstring("Mobile operating system by Apple");
+
+        Utils.sleep(5);
+
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.waitForTitleElement();
+            articlePageObject.addNextArticleToMyList(nameOfFolder);
+            articlePageObject.closeArticle();
+        } else {
+            articlePageObject.waitForTitleElement("id:iOS");
+            articlePageObject.addArticlesToMySaved();
+            articlePageObject.closeArticle();
+            searchPageObject.clickCancelSearch();
+        }
         navigationUI.clickMyLists();
         Utils.sleep(4);
+        String lastArticleID;
 
-        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
-        myListsPageObject.openFolderByName(nameOfFolder);
-        Utils.sleep(10);
-        myListsPageObject.swipeByArticleToDelete(firstArticleTitle);
-        myListsPageObject.waitForArticleToAppearByTitle(secondArticleTitle);
-        myListsPageObject.openArticleByName(secondArticleTitle);
-        String titleAfterOpening = articlePageObject.getArticleTitle();
+        if (Platform.getInstance().isIOS()) {
+            navigationUI.clickClosePopup();
+        } else {
+            myListsPageObject.openFolderByName(nameOfFolder);
+        }
 
-        assertEquals(
-                "Article title is not equal",
-                secondArticleTitle,
-                titleAfterOpening
-        );
+        Utils.sleep(3);
+        myListsPageObject.swipeByArticleToDelete(articleTitle);
+        if (Platform.getInstance().isIOS()) {
+            myListsPageObject.openArticleByName("iOS");
+        } else {
+            myListsPageObject.openArticleByName("IOS");
+        }
+
+        myListsPageObject.waitForArticleTitleAndDescription ("iOS", "Mobile operating system by Apple");
+
     }
-
 }

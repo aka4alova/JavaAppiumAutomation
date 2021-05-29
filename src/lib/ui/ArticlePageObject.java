@@ -29,14 +29,17 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public WebElement waitForTitleElement() {
-        //System.out.println(TITLE);
-        System.out.println("Статья = " + waitForElementPresent(TITLE, "Cannot find article title on page!", 15).getAttribute("name"));
+
         return this.waitForElementPresent(TITLE, "Cannot find article title on page!", 15);
+    }
+
+    public WebElement waitForTitleElement(String articleTitle) {
+
+        return this.waitForElementPresent(articleTitle, "Cannot find article title on page!", 15);
     }
 
     public String getArticleTitle() {
         WebElement titleElement = waitForTitleElement();
-        System.out.println("Название статьи = " + titleElement.getAttribute("name"));
         if (Platform.getInstance().isAndroid()) {
             return titleElement.getAttribute("text");
         } else {
@@ -126,5 +129,7 @@ abstract public class ArticlePageObject extends MainPageObject {
                 10
         );
     }
+
+
 
 }
