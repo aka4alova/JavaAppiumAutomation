@@ -14,6 +14,12 @@ public class IOSSearchPageObject extends SearchPageObject {
                 "/..//XCUIElementTypeStaticText[contains (@name, '{DESCRIPTION_SUBSTRING}')]/..";
         SEARCH_RESULT_ELEMENT = "xpath://XCUIElementTypeCell";
         SEARCH_EMPTY_RESULT_LABEL = "xpath://XCUIElementTypeStaticText[@name='No results found']";
+        descriptions[0] = "Indonesian island";
+        descriptions[1] = "High-level programming language";
+        descriptions[2] = "Object-oriented programming language";
+//        titles[0] = "Java";
+//        titles[1] = "JavaScript";
+//        titles[2] = "Java (programming language)";
     }
 
     public IOSSearchPageObject (AppiumDriver driver) {

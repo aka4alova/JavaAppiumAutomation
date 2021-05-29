@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -68,15 +69,10 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        String [] titles = { "Java", "JavaScript", "Java (programming language)" };
-        String [] descriptions = { "Island of Indonesia", "Programming language", "Object-oriented programming language" };
+
         int amountOfSearchResults = searchPageObject.getAmountOfFoundArticles();
         System.out.println("Найдено статей: " + amountOfSearchResults);
         assertTrue("too few results was found", amountOfSearchResults > 2);
-        for (int i = 0; i < titles.length; i++) {
-            searchPageObject.waitForElementByTitleAndDescription(titles[i], descriptions[i]);
-        }
-        //searchPageObject.waitForElementByTitleAndDescription(titles[1], descriptions[2]); //тут тест должен упасть
+        searchPageObject.checkThreeElementsByTitleAndDescription();
     }
-
 }

@@ -15,6 +15,10 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_RESULT_ELEMENT,
             SEARCH_EMPTY_RESULT_LABEL;
 
+    protected static String []
+            descriptions = new String[3],
+            titles = {"Java", "JavaScript", "Java (programming language)"};
+
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
@@ -84,6 +88,16 @@ public class SearchPageObject extends MainPageObject {
     public void waitForElementByTitleAndDescription(String title, String description) {
         String searchResultXpath = getResultSearchElementByTitleAndDescription(title, description);
         this.waitForElementPresent(searchResultXpath, "cannot find search result by title " + title + " and description " + description, 15);
+    }
+
+    public void checkThreeElementsByTitleAndDescription() {
+        for (int i = 0; i < 3; i++) {
+            System.out.println("i из метода checkThreeElementsByTitleAndDescription = " + i);
+            String searchResultXpath = getResultSearchElementByTitleAndDescription(titles[i], descriptions[i]);
+            this.waitForElementPresent(searchResultXpath, "cannot find search result by title " + titles[i] + " and description " + descriptions[i], 15);
+        }
+
+
     }
 
 }
